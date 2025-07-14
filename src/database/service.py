@@ -1,7 +1,10 @@
 from logging import getLogger
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from src.config import get_settings
 from src.database.models import Study, User
+from src.services.fernet_crypt import encrypt_string, decrypt_string
 
 logger = getLogger(__name__)
 
@@ -56,10 +59,11 @@ async def update_login(chat_id: int, login: str, current_session: AsyncSession) 
 
 
 async def update_password(chat_id: int, password: str, current_session: AsyncSession) -> None:
+    encrypted_password = encrypt_string(password, get_settings().FERNET_KEY)
     await current_session.execute(
         update(User)
         .where(User.chat_id == chat_id)
-        .values(password_service=password, state="accepted")
+        .values(password_service=encrypted_password, state="accepted")
     )
     await current_session.commit()
 
@@ -89,19 +93,21 @@ async def update_state(chat_id: int, state: str, current_session: AsyncSession) 
 
 
 async def update_php_session(chat_id: int, session: str, current_session: AsyncSession) -> None:
+    encrypted_session = encrypt_string(session, get_settings().FERNET_KEY)
     await current_session.execute(
         update(User)
         .where(User.chat_id == chat_id)
-        .values(php_session=session)
+        .values(php_session=encrypted_session)
     )
     await current_session.commit()
 
 
 async def update_remember_me_session(chat_id: int, session: str, current_session: AsyncSession) -> None:
+    encrypted_session = encrypt_string(session, get_settings().FERNET_KEY)
     await current_session.execute(
         update(User)
         .where(User.chat_id == chat_id)
-        .values(remember_me_session=session)
+        .values(remember_me_session=encrypted_session)
     )
     await current_session.commit()
 
@@ -109,7 +115,7 @@ async def update_remember_me_session(chat_id: int, session: str, current_session
 async def get_remember_me(chat_id: int, current_session: AsyncSession) -> str:
     request = select(User.remember_me_session).where(User.chat_id == chat_id)
     result = await current_session.execute(request)
-    return result.scalar()
+    return decrypt_string(result.scalar(), get_settings().FERNET_KEY)
 
 def convert_to_dict(data: dict) -> dict:
     subject_scores = {}

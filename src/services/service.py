@@ -34,10 +34,8 @@ async def handler_login(chat_id: int, message: str, session) -> str:
     return "Некорректный логин, попробуй ввести еще раз"
 
 async def handler_password(chat_id: int, message, current_session):
-    print("123\n\n\n")
     login = await get_login(chat_id, current_session)
     password = message
-    print("123\n\n\n")
     # Попытка войти на сайт
     login_url = 'https://lk.gubkin.ru/new/api/api.php?module=auth&method=login'
     user = {
@@ -46,26 +44,20 @@ async def handler_password(chat_id: int, message, current_session):
         "rememberMe": 1
     }
     session = requests.Session()
-    print("12333\n\n\n")
     response = session.post(login_url, json=user, verify='src/cacert.pem')
     print(response.text)
-    print("123\n\n\n")
     if response.status_code != 200:
         await update_state(chat_id, 'login', current_session)
         print(response.text)
         return "Попробуйте еще раз :("
     cookies = session.cookies.get_dict()
-    print("123\n\n\n")
     php_session = cookies.get('PHPSESSID')
     remember_me = cookies.get('remember_me')
-    print("123\n\n\n")
     await update_php_session(chat_id, php_session, current_session)
     await update_remember_me_session(chat_id, remember_me, current_session)
     await update_password(chat_id, message, current_session)
     objects_response = await parse_objects(chat_id, current_session)
-    print("ok1\n\n\n")
     if objects_response: await add_objects(chat_id, objects_response, current_session)
-    print("ok2\n\n\n")
     return "Получилось! Теперь можешь дергать мои ручки :)"
 
 async def parse_objects(chat_id: int, session):

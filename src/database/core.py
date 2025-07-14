@@ -3,6 +3,7 @@ from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
 from logging import getLogger
 from src.config import get_settings
+from src.database.models import Base
 
 logger = getLogger(__name__)
 database_url = get_settings().database_url
@@ -22,3 +23,7 @@ AsyncSessionLocal = async_sessionmaker(
     autoflush=False,
     class_=AsyncSession,
 )
+
+async def create_tables():
+    async with async_engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)

@@ -1,0 +1,38 @@
+services:
+  fastapi:
+    build: .
+    command: python -m src.main
+    env_file:
+      - .env
+    ports:
+      - "${app_port}:${app_port}"
+    depends_on:
+      - database
+      - rabbitmq
+
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    env_file:
+      - .env
+    ports:
+      - "${rabbitmq_port}:${rabbitmq_port}"
+      - "${rabbitmq_management_port}:${rabbitmq_management_port}"
+    depends_on:
+      - database
+
+  database:
+    image: postgres:15
+    env_file:
+      - .env
+    environment:
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "${postgres_port}:${postgres_port}"
+
+  consumer:
+    build: .
+    command: python -m src.consumer.parser
+    depends_on:
+      - database
+      - rabbitmq
+      - fastapi

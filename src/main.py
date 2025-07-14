@@ -1,10 +1,12 @@
 from asyncio import run
 import src.api.handlers
-from src.config import get_settings
+from src.database.core import create_tables
 from src.create_bot import bot
 
-print("DB URL:", get_settings().database_url)
 
 async def main():
+    await create_tables()
     await bot.infinity_polling()
-run(main())
+
+if __name__ == "__main__":
+    run(main())
