@@ -1,7 +1,7 @@
 from sqlalchemy_utils.utils import starts_with
 from src.database.core import AsyncSessionLocal
 from src.database.service import get_state
-from src.services.service import register_user, get_score, change_mode, handler_login, handler_password
+from src.services.service import register_user, get_score, handler_login, handler_password
 from src.create_bot import bot
 
 def middleware_function(function):
