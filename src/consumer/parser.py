@@ -9,7 +9,7 @@ from src.config import get_settings
 from logging import getLogger
 
 from src.database.core import AsyncSessionLocal
-from src.database.service import get_login, get_remember_me, get_objects, update_objects, get_all_users
+from src.database.service import get_login, get_remember_me, get_objects, update_objects, get_all_users, update_state
 from src.create_bot import bot
 
 logger = getLogger(__name__)
@@ -34,6 +34,12 @@ async def parse_data(chat_id: int) -> dict:
                 async with http_session.get(url, params=params, cookies=cookies, headers=headers) as response:
                     if response.status == 200:
                         return await response.json()
+                    else:
+                        response = await response.json()
+                        if not response['success']:
+                            async with AsyncSessionLocal() as session_current:
+                                await update_state(chat_id, "login", session_current)
+                                bot.send_message(chat_id=chat_id, text="Нужно заново залогиниться :(\n Введи, пожалуйста, логин")
                     raise HTTPException(status_code=404, detail="Not found")
 
 

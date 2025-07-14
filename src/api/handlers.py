@@ -45,17 +45,3 @@ async def handler_login_user(message):
 
 async def handler_password_user(message):
     await function_message(message, handler_password, message.text)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
