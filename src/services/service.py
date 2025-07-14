@@ -5,12 +5,8 @@ import requests
 from src.database.service import get_average_score, register_user_object, update_login, \
     update_password, update_mode, get_login, update_state, update_php_session, update_remember_me_session, add_objects, \
     get_remember_me
-from cryptography.fernet import Fernet
-from src.config import get_settings
 
 logger = getLogger(__name__)
-
-fernet = Fernet(get_settings().FERNET_KEY)
 
 async def change_mode(chat_id: int, mode: str, session) -> str:
     if mode in ["active", "passive"]:
@@ -37,7 +33,6 @@ async def handler_login(chat_id: int, message: str, session) -> str:
 async def handler_password(chat_id: int, message, current_session):
     login = await get_login(chat_id, current_session)
     password = message
-    # Попытка войти на сайт
     login_url = 'https://lk.gubkin.ru/new/api/api.php?module=auth&method=login'
     user = {
         "login": login,
@@ -46,10 +41,8 @@ async def handler_password(chat_id: int, message, current_session):
     }
     session = requests.Session()
     response = session.post(login_url, json=user, verify='src/cacert.pem')
-    print(response.text)
     if response.status_code != 200:
         await update_state(chat_id, 'login', current_session)
-        print(response.text)
         return "Попробуйте еще раз :("
     cookies = session.cookies.get_dict()
     php_session = cookies.get('PHPSESSID')
@@ -84,7 +77,7 @@ async def parse_objects(chat_id: int, session):
     if response.status_code == 200:
         return response.json()
     else:
-        print(f"Ошибка: {response.status_code}, Ответ: {response.text}")
+        logger.error("Parsed objects not success :(")
         return None
 
 

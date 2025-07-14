@@ -62,7 +62,7 @@ async def process_user(chat_id: int):
         for object_name in updated_objects:
             flag = "+" if updated_objects[object_name][1] - updated_objects[object_name][0] > 0 else ""
             await bot.send_message(chat_id=chat_id, text=f"🔄 [{object_name}]: {updated_objects[object_name][0]} -> {updated_objects[object_name][1]} [{flag}{updated_objects}]")
-        logger.info(f"Отправлено уведомление для {chat_id}")
+        logger.info(f"Notification send for {chat_id}")
 
 
 async def main_worker():
@@ -81,7 +81,7 @@ async def main_worker():
             async with connection:
                 channel = await connection.channel()
                 queue = await channel.declare_queue('gubkin_parser_queue', durable=True)
-                logger.info("Успешное подключение к RabbitMQ")
+                logger.info("Connection success for RabbitMQ")
 
                 async with queue.iterator() as queue_iter:
                     async for message in queue_iter:
@@ -90,7 +90,7 @@ async def main_worker():
                             await process_user(data['chat_id'])
 
         except Exception as e:
-            logger.error(f"Ошибка подключения: {str(e)}")
+            logger.error(f"Connection error: {str(e)}")
             await asyncio.sleep(15)
 
 
