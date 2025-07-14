@@ -20,12 +20,26 @@ async def get_average_score(chat_id: int, current_session: AsyncSession) -> floa
     logger.info(f"Sent average score for {chat_id}")
     return average
 
+async def get_objects(chat_id: int, current_session: AsyncSession) -> dict:
+    request = select(Study.objects).where(Study.chat_id == chat_id)
+    result = await current_session.execute(request)
+    objects = result.scalar()
+    return objects
 
 async def add_objects(chat_id: int, objects: dict, current_session: AsyncSession) -> None:
     objects_dict = convert_to_dict(objects)
     current_session.add(Study(chat_id=chat_id, objects=objects_dict))
     await current_session.commit()
     logger.info(f"Objects added for {chat_id}")
+
+async def update_objects(chat_id: int, objects: dict, current_session: AsyncSession) -> None:
+    objects_dict = convert_to_dict(objects)
+    await current_session.execute(
+        update(Study)
+        .where(Study.chat_id == chat_id)
+        .values(objects=objects_dict)
+    )
+    await current_session.commit()
 
 async def get_state(chat_id: int, current_session: AsyncSession) -> str:
     request = select(User.state).where(User.chat_id == chat_id)
@@ -104,3 +118,8 @@ def convert_to_dict(data: dict) -> dict:
         current_score = subject['currentPoints']
         subject_scores[name] = (current_score, max_score)
     return subject_scores
+
+async def get_all_users(current_session: AsyncSession):
+    request = select(User.chat_id)
+    result = await current_session.execute(request)
+    return result.scalars().all()

@@ -4,7 +4,7 @@ pydantic_settings
 SQLAlchemy~=2.0.41
 pydantic~=2.11.5
 pydantic-settings~=2.9.1
-aiohttp
+aiohttp~=3.12.13
 PyJWT
 httpx
 cryptography~=45.0.4
@@ -17,3 +17,4 @@ asyncio~=3.4.3
 requests~=2.32.4
 asyncpg
 fastapi~=0.115.12
+aio-pika~=9.5.5

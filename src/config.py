@@ -10,6 +10,11 @@ class Settings(BaseSettings):
     postgres_host: str = "localhost"
     postgres_port: int = 5432
     postgres_db: str = "notification_db"
+    rabbitmq_user: str = "guest"
+    rabbitmq_password: str = "guest"
+    rabbitmq_host: str = "rabbitmq"
+    rabbitmq_port: int = 5672
+    rabbitmq_management_port: int = 15672
 
     @property
     def database_url(self) -> str:
