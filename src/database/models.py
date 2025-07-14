@@ -18,8 +18,3 @@ class User(Base):
     php_session: Mapped[str] = mapped_column(nullable=True)
     remember_me_session: Mapped[str] = mapped_column(nullable=True)
 
-class Notification(Base):
-    __tablename__ = "notifications"
-    chat_id: Mapped[int] = mapped_column(primary_key=True, index=True)
-    type: Mapped[str]
-
