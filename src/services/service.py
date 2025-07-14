@@ -23,7 +23,8 @@ async def get_score(chat_id: int, session) -> str:
 
 async def register_user(chat_id: int, session) -> str:
     response = ("Привет! У меня доступно несколько команд:\n"
-                "/mode - смена режима\n/score - получение среднего результата из ЛК\nЖду твоего сообщения :)")
+                "/mode - смена режима\n/score - получение среднего результата из ЛК\n"
+                "Но сначала нужно залогиниться в ЛК. Напиши, пожалуйста, свой логин")
     await register_user_object(chat_id, session)
     return response
 

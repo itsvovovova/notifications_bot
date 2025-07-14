@@ -33,7 +33,6 @@ async def handler_request(message):
 
 @bot.message_handler(commands=['start'])
 async def handler_start(message):
-    print("Сообщение получено")
     await function_message(message, register_user)
 
 @bot.message_handler(commands=['score'])
@@ -51,7 +50,6 @@ async def handler_login_user(message):
     await function_message(message, handler_login, message.text)
 
 async def handler_password_user(message):
-    print("okkk\n\n\n")
     await function_message(message, handler_password, message.text)
 
 
