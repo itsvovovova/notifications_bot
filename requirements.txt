@@ -15,3 +15,5 @@ cryptography
 SQLAlchemy-Utils~=0.41.2
 asyncio~=3.4.3
 requests~=2.32.4
+asyncpg
+fastapi~=0.115.12
