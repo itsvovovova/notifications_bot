@@ -1,11 +1,10 @@
-from telebot.async_telebot import AsyncTeleBot
+from asyncio import run
+import src.api.handlers
 from src.config import get_settings
-from fastapi import FastAPI
-from src.api.telegram_router import lifespan, current_router
+from src.create_bot import bot
 
-app = FastAPI(lifespan=lifespan)
+print("DB URL:", get_settings().database_url)
 
-app.include_router(current_router)
-
-bot = AsyncTeleBot(get_settings().bot_token)
-bot.infinity_polling()
+async def main():
+    await bot.infinity_polling()
+run(main())
