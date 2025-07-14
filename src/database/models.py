@@ -14,7 +14,6 @@ class User(Base):
     chat_id: Mapped[int] = mapped_column(primary_key=True, index=True)
     login_service: Mapped[str] = mapped_column(nullable=True)
     password_service: Mapped[str] = mapped_column(nullable=True)
-    mode: Mapped[str] = mapped_column(nullable=True)
     state: Mapped[str] = mapped_column(nullable=True)
     php_session: Mapped[str] = mapped_column(nullable=True)
     remember_me_session: Mapped[str] = mapped_column(nullable=True)

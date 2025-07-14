@@ -26,7 +26,7 @@ async def function_message(message, function, *args):
         response_text = await function(message.chat.id, *args, session)
         await bot.send_message(message.chat.id, response_text)
 
-@bot.message_handler(func=lambda message: message.text and all(not starts_with(message.text, u) for u in ("/score", "/mode", "/start")))
+@bot.message_handler(func=lambda message: message.text and all(not starts_with(message.text, u) for u in ("/score", "/start")))
 @middleware_function
 async def handler_request(message):
     await bot.send_message(message.chat.id, "Что-что-что ? Я не совсем понял тебя :(")
@@ -39,12 +39,6 @@ async def handler_start(message):
 @middleware_function
 async def handler_score(message):
     await function_message(message, get_score)
-
-
-@bot.message_handler(commands=['mode'])
-@middleware_function
-async def handler_mode(message):
-    await function_message(message, change_mode, message.text[len("/mode"):])
 
 async def handler_login_user(message):
     await function_message(message, handler_login, message.text)

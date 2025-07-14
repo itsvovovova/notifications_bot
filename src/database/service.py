@@ -68,15 +68,6 @@ async def update_password(chat_id: int, password: str, current_session: AsyncSes
     await current_session.commit()
 
 
-async def update_mode(chat_id: int, mode: str, current_session: AsyncSession) -> None:
-    await current_session.execute(
-        update(User)
-        .where(User.chat_id == chat_id)
-        .values(mode=mode)
-    )
-    await current_session.commit()
-
-
 async def get_login(chat_id: int, current_session: AsyncSession) -> str:
     request = select(User.login_service).where(User.chat_id == chat_id)
     result = await current_session.execute(request)

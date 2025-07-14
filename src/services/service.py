@@ -3,24 +3,17 @@ from logging import getLogger
 import requests
 
 from src.database.service import get_average_score, register_user_object, update_login, \
-    update_password, update_mode, get_login, update_state, update_php_session, update_remember_me_session, add_objects, \
+    update_password, get_login, update_state, update_php_session, update_remember_me_session, add_objects, \
     get_remember_me
 
 logger = getLogger(__name__)
-
-async def change_mode(chat_id: int, mode: str, session) -> str:
-    if mode in ["active", "passive"]:
-        await update_mode(chat_id, mode, session)
-        return "Режим успешно изменен!"
 
 async def get_score(chat_id: int, session) -> str:
     average = await get_average_score(chat_id, session)
     return f"Average score: {average}"
 
 async def register_user(chat_id: int, session) -> str:
-    response = ("Привет! У меня доступно несколько команд:\n"
-                "/mode - смена режима\n/score - получение среднего результата из ЛК\n"
-                "Но сначала нужно залогиниться в ЛК. Напиши, пожалуйста, свой логин")
+    response = ("Привет! Тебе нужно залогиниться в ЛК. Напиши, пожалуйста, свой логин")
     await register_user_object(chat_id, session)
     return response
 
