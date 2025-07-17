@@ -17,3 +17,5 @@ requests~=2.32.4
 asyncpg
 fastapi~=0.115.12
 aio-pika~=9.5.5
+pytest~=8.3.5
+pytest-asyncio

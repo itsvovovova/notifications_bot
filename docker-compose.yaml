@@ -9,6 +9,9 @@ services:
     depends_on:
       - database
       - rabbitmq
+    volumes:
+      - .:/app
+
 
   rabbitmq:
     image: rabbitmq:3.12-management

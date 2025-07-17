@@ -8,4 +8,6 @@ WORKDIR /app
 
 CMD ["python -m", "src.main"]
 
+ENV PYTHONPATH=/app
+
 RUN pip install -r requirements.txt
