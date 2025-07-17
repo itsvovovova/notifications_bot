@@ -9,14 +9,14 @@ services:
     depends_on:
       - database
       - rabbitmq
-    volumes:
-      - .:/app
-
 
   rabbitmq:
     image: rabbitmq:3.12-management
     env_file:
       - .env
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
     ports:
       - "${rabbitmq_port}:${rabbitmq_port}"
       - "${rabbitmq_management_port}:${rabbitmq_management_port}"
@@ -28,13 +28,14 @@ services:
     env_file:
       - .env
     environment:
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
       - "${postgres_port}:${postgres_port}"
 
   consumer:
     build: .
-    command: python -m src.consumer.parser
+    command: sh -c "sleep 30 && python -m src.consumer.parser"
     depends_on:
       - database
       - rabbitmq

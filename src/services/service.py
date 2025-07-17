@@ -45,7 +45,7 @@ async def handler_password(chat_id: int, message, current_session):
     await update_password(chat_id, message, current_session)
     objects_response = await parse_objects(chat_id, current_session)
     if objects_response: await add_objects(chat_id, objects_response, current_session)
-    return "Получилось! Теперь можешь дергать мои ручки :)"
+    return "Получилось! Как только появятся изменения в баллах, обязательно пришлю тебе. Кстати, есть команда /score, благодаря которой можешь посмотреть текущий средний балл в ЛК во время семестра. "
 
 async def parse_objects(chat_id: int, session):
     remember_me = await get_remember_me(chat_id, session)

@@ -36,11 +36,10 @@ async def add_objects(chat_id: int, objects: dict, current_session: AsyncSession
     logger.info(f"Objects added for {chat_id}")
 
 async def update_objects(chat_id: int, objects: dict, current_session: AsyncSession) -> None:
-    objects_dict = convert_to_dict(objects)
     await current_session.execute(
         update(Study)
         .where(Study.chat_id == chat_id)
-        .values(objects=objects_dict)
+        .values(objects=objects)
     )
     await current_session.commit()
 
@@ -110,6 +109,7 @@ async def get_remember_me(chat_id: int, current_session: AsyncSession) -> str:
 
 def convert_to_dict(data: dict) -> dict:
     subject_scores = {}
+    print(data)
     for subject in data['result']['performance']:
         name, max_score = subject['name'], subject['maxPoints']
         current_score = subject['currentPoints']

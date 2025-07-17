@@ -1,7 +1,7 @@
 # notification_bot
 
 ### Telegram-бот, который мониторит баллы студентов из личного кабинета lk.gubkin.ru и присылает им уведомления об изменениях.
-
+![photo.jpg](photo.jpg)
 ---
 
 ## ⚙️ Быстрый запуск
@@ -9,8 +9,8 @@
 1. Клонируйте репозиторий:
 
     ```bash
-    git clone https://github.com/itsvovovovova/notification_bot.git
-    cd notification_bot
+    git clone https://github.com/itsvovovovova/notifications_bot.git
+    cd notifications_bot
     ```
 
 2. Создайте `.env` файл:
